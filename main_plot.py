@@ -11,17 +11,26 @@ plt.style.use("./custom.mplstyle")
 #####################
 bf_kind = "ACT_only"
 mode = "EE"
+lims = [50, 1200]
+
+save_plots = True
+plot_dir = "plots/"
 
 #exp = "Planck"
 exp = "SPT"
 
 #xfreq = "143x143"
 xfreq = "90x90"
+
 if exp == "Planck":
     spec = f"{mode}_{xfreq}"
 elif exp == "SPT":
     spec = f"{mode} {xfreq}"
-lims = [50, 1200]
+
+if save_plots:
+    import os
+    if not os.path.exists(plot_dir):
+        os.makedirs(plot_dir)
 #####################
 #####################
 #####################
@@ -139,7 +148,8 @@ ax2.errorbar(lb_cdm, yw - yb_cdm, yerr = yerrw, ls = "None",
 
 ### Planck ###
 if exp == "Planck":
-    bin_pk = binning_planck[np.argwhere(binning_planck[:, 2] == planck_data[spec]["ell"][0])[0,0]:]
+    bin_pk = binning_planck[
+        np.argwhere(binning_planck[:, 2] == planck_data[spec]["ell"][0])[0,0]:]
     rebin_min_planck = np.array([bin_pk[i*n,0] for i in range(len(bin_pk)//n)])
     rebin_max_planck = np.array([bin_pk[(i+1)*n - 1, 1] for i in range(len(bin_pk)//n)])
     rebin_mean_planck = (rebin_min_planck + rebin_max_planck) / 2
@@ -162,12 +172,9 @@ ax2.errorbar(lb_cdm, yp - yb_cdm, yerr = yerrp, ls = "None",
              marker = ".", capsize = 1., elinewidth = 1.)
 ##############
 
-### Residual EDE ###
-#lb_ede, yb_ede = bin_actlike(act_data_dir, act_bf[bf_kind, "EDE"][mode],
-#                             mode, "deep", binning_act)
-
 ax2.set_ylabel(r"$\Delta D_\ell^{%s}}$" % mode)
 ax2.set_ylim(-3, 3)
 ax2.set_xlim(left = 200)
-#plt.savefig(plot_dir + "%s_%s_%s.png" % (lab_BF, lab_data, mode), dpi=300)
+if save_plots:
+    plt.savefig(plot_dir + f"{bf_kind}_{mode}_{exp}_{xfreq}.png", dpi=300)
 plt.show()
