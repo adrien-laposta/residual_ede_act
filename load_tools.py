@@ -55,7 +55,7 @@ def load_act_best_fits(act_dir):
                         power spectra for each kind of
                         best-fit
     """
-    spec_file = act_dir + "ACT_%s_bf_%s_ThibautAdrien_26Aug2021.txt"
+    spec_file = act_dir + "ACT_%s_bf_%s_26Aug2021.txt"
     kind = {"ACT_only": "only",
             "ACT+WMAP": "P18TTlmax650"}
     model = ["LCDM", "EDE"]
