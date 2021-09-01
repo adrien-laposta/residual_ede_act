@@ -13,14 +13,14 @@ bf_kind = "ACT_only"
 mode = "EE"
 lims = [50, 1200]
 
-save_plots = True
+save_plots = False
 plot_dir = "plots/"
 
-#exp = "Planck"
-exp = "SPT"
+exp = "Planck"
+#exp = "SPT"
 
-#xfreq = "143x143"
-xfreq = "90x90"
+xfreq = "143x143"
+#xfreq = "150x150"
 
 if exp == "Planck":
     spec = f"{mode}_{xfreq}"
@@ -35,10 +35,10 @@ if save_plots:
 #####################
 #####################
 
-
 data_dir = "data/"
 act_bf_dir = data_dir + "ACT_bestfits/"
 planck_data_dir = data_dir + "Planck_data/"
+planck_bf_dir = data_dir + "PLA/"
 act_data_dir = data_dir + "ACT_data/"
 spt_data_dir = data_dir + "SPT3G_data/"
 
@@ -49,6 +49,7 @@ planck_data = load_tools.load_planck_data(planck_data_dir)
 act_bf = load_tools.load_act_best_fits(act_bf_dir)
 act_data = load_tools.load_act_data(act_data_dir)
 spt_data = load_tools.load_spt_data(spt_data_dir)
+planck_bf = load_tools.load_planck_best_fit_PLA(planck_bf_dir)
 
 #### Plot ####
 fig = plt.figure(figsize = (12, 8))
@@ -127,7 +128,14 @@ ax2.set_xlabel(r"$\ell$")
 ax2.axhline(0, xmin = -100, xmax = 1e4, color = "k", ls = "--")
 
 ### Bestfit difference ###
-ax2.plot(x_ede, y_ede - y_cdm, color = "k", lw = 0.7)
+ax2.plot(x_ede, y_ede - y_cdm, color = "k",
+         lw = 0.7, label = "ACT EDE - ACT LCDM")
+
+if exp == "Planck":
+    ax2.plot(x_ede, planck_bf["EE"][lims[0]-2:lims[1]-1] - y_cdm,
+             lw = 0.7, ls = "dotted", color = "k",
+             label = "Planck LCDM - ACT LCDM")
+    ax2.legend(fontsize = 10)
 ##########################
 
 ### Residual LCDM ###
@@ -176,5 +184,5 @@ ax2.set_ylabel(r"$\Delta D_\ell^{%s}}$" % mode)
 ax2.set_ylim(-3, 3)
 ax2.set_xlim(left = 200)
 if save_plots:
-    plt.savefig(plot_dir + f"{bf_kind}_{mode}_{exp}_{xfreq}.png", dpi=300)
+    plt.savefig(plot_dir + f"{bf_kind}_{mode}_{exp}_{xfreq}.png", dpi = 300)
 plt.show()

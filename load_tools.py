@@ -1,6 +1,7 @@
 import numpy as np
 import os
 from scipy.io import FortranFile
+import pandas as pd
 
 def load_planck_data(planck_data_dir):
     """
@@ -43,6 +44,34 @@ def load_planck_data(planck_data_dir):
                          "Dl": spec[:, 1] * pr,
                          "cov": covmat[ids[i]:ids[i+1],
                                        ids[i]:ids[i+1]] * np.outer(pr, pr)}
+    return(outputs)
+
+def load_planck_best_fit_PLA(PLA_dir):
+    """
+    Args:
+        PLA_dir: str - name of the PLA directory
+
+    Returns:
+        outputs: dict - contains the PLA multipoles and
+                        best fit power spectra
+    """
+    PLA_bf_file = PLA_dir + ("COM_PowerSpect_CMB-base-plikHM-"
+                             "TTTEEE-lowl-lowE-lensing-"
+                             "minimum-theory_R3.01.txt")
+    PLA_bf = pd.read_csv(PLA_bf_file, delim_whitespace = True,
+                         index_col = 0)
+
+    ell = PLA_bf.index
+    cal2 = (1.000442)**2  ###calibration from the PLA
+    TT = PLA_bf.TT / cal2
+    TE = PLA_bf.TE / cal2
+    EE = PLA_bf.EE / cal2
+
+    outputs = {"ell": ell,
+               "TT": TT,
+               "EE": EE,
+               "TE": TE}
+
     return(outputs)
 
 def load_act_best_fits(act_dir):
