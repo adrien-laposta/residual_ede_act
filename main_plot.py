@@ -22,6 +22,15 @@ exp = "Planck"
 xfreq = "143x143"
 #xfreq = "150x150"
 
+act_pol_eff = {("ACT_only", "LCDM"): 1.000934985,
+               ("ACT_only", "EDE"): 0.9951140073,
+               ("ACT+WMAP", "LCDM"): 1.001913951,
+               ("ACT+WMAP", "EDE"): 1.005842680}
+if mode == "EE":
+    pol_eff = act_pol_eff[bf_kind, "LCDM"] ** 2
+elif mode == "TE":
+    pol_eff = act_pol_eff[bf_kind, "LCDM"]
+
 if exp == "Planck":
     spec = f"{mode}_{xfreq}"
 elif exp == "SPT":
@@ -145,12 +154,12 @@ lb_cdm, yb_cdm = bin_tools.bin_actlike(act_data_dir,
 lb_cdm, yb_cdm = tools.cut_spec(lims, lb_cdm, yb_cdm)
 
 ### Deep ###
-ax2.errorbar(lb_cdm, yd - yb_cdm , yerr = yerrd, ls = "None",
+ax2.errorbar(lb_cdm, yd / pol_eff - yb_cdm , yerr = yerrd, ls = "None",
              marker = ".", capsize = 1., elinewidth = 1.)
 ############
 
 ### Wide ###
-ax2.errorbar(lb_cdm, yw - yb_cdm, yerr = yerrw, ls = "None",
+ax2.errorbar(lb_cdm, yw / pol_eff - yb_cdm, yerr = yerrw, ls = "None",
              marker = ".", capsize = 1., elinewidth = 1.)
 ############
 
