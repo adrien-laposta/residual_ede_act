@@ -125,15 +125,15 @@ ax.set_ylabel(r"$D_\ell^{\mathrm{%s}}$" % mode)
 ### Residual plot ###
 ax2 = fig.add_axes((.15, .1, .8, .2), sharex = ax)
 ax2.set_xlabel(r"$\ell$")
-ax2.axhline(0, xmin = -100, xmax = 1e4, color = "k", ls = "--")
+ax2.axhline(0, xmin = -100, xmax = 1e4, color = "k", ls = "--", lw = 1.)
 
 ### Bestfit difference ###
 ax2.plot(x_ede, y_ede - y_cdm, color = "k",
-         lw = 0.7, label = "ACT EDE - ACT LCDM")
+         lw = 0.8, label = "ACT EDE - ACT LCDM")
 
 if exp == "Planck":
     ax2.plot(x_ede, planck_bf["EE"][lims[0]-2:lims[1]-1] - y_cdm,
-             lw = 0.7, ls = "dotted", color = "k",
+             lw = 0.8, ls = "dotted", color = "k",
              label = "Planck LCDM - ACT LCDM")
     ax2.legend(fontsize = 10)
 ##########################
